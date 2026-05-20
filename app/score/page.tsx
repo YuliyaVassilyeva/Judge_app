@@ -46,6 +46,7 @@ export default function ScorePage() {
       judge,
       startup_name: startupName.trim(),
       ...scores,
+      total_score: total,
     });
 
     setSubmitting(false);
@@ -69,12 +70,6 @@ export default function ScorePage() {
           <p className="text-indigo-400 font-medium mt-1">{judge}</p>
         </div>
         <div className="flex gap-3">
-          <button
-            onClick={() => router.push("/results")}
-            className="text-sm text-gray-400 hover:text-white underline"
-          >
-            Results
-          </button>
           <button
             onClick={() => { sessionStorage.removeItem("judge"); router.push("/"); }}
             className="text-sm text-gray-400 hover:text-white underline"

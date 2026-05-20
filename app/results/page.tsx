@@ -38,6 +38,10 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!sessionStorage.getItem("admin")) {
+      router.push("/admin");
+      return;
+    }
     async function load() {
       const { data: rows } = await supabase
         .from("scores")
@@ -72,10 +76,10 @@ export default function ResultsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Results</h1>
         <button
-          onClick={() => router.push("/score")}
+          onClick={() => { sessionStorage.removeItem("admin"); router.push("/admin"); }}
           className="text-sm text-gray-400 hover:text-white underline"
         >
-          Back to scoring
+          Log out
         </button>
       </div>
 
