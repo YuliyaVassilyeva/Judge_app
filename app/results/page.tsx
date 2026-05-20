@@ -55,7 +55,9 @@ export default function ResultsPage() {
       const summaries = Object.entries(grouped).map(([name, scores]) => ({
         startup_name: name,
         scores,
-        avg_total: Math.round(scores.reduce((a, s) => a + s.total_score, 0) / scores.length),
+        avg_total: parseFloat(
+          (scores.reduce((a, s) => a + s.total_score, 0) / scores.length).toFixed(1)
+        ),
       }));
 
       summaries.sort((a, b) => b.avg_total - a.avg_total);
@@ -83,13 +85,27 @@ export default function ResultsPage() {
         <p className="text-gray-500">No scores submitted yet.</p>
       )}
 
+      {!loading && data.length > 0 && (
+        <div className="bg-indigo-600 rounded-2xl px-6 py-5 flex items-center gap-4">
+          <span className="text-4xl">🏆</span>
+          <div>
+            <p className="text-indigo-200 text-sm font-medium uppercase tracking-wide">Winner</p>
+            <p className="text-3xl font-black">Startup {data[0].startup_name}</p>
+            <p className="text-indigo-200 text-sm mt-0.5">
+              Average score: <span className="font-bold text-white">{data[0].avg_total} / 60</span>
+              {" "}across {data[0].scores.length} judge{data[0].scores.length !== 1 ? "s" : ""}
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-6">
         {data.map((startup, idx) => (
-          <div key={startup.startup_name} className="bg-gray-800 rounded-2xl p-6 flex flex-col gap-4">
+          <div key={startup.startup_name} className={`rounded-2xl p-6 flex flex-col gap-4 ${idx === 0 ? "bg-gray-700 ring-2 ring-indigo-500" : "bg-gray-800"}`}>
             <div className="flex items-center gap-3">
               <span className="text-2xl font-black text-indigo-400">#{idx + 1}</span>
               <div>
-                <h2 className="text-xl font-bold">{startup.startup_name}</h2>
+                <h2 className="text-xl font-bold">Startup {startup.startup_name}</h2>
                 <p className="text-gray-400 text-sm">
                   {startup.scores.length} judge{startup.scores.length !== 1 ? "s" : ""} · Avg total:{" "}
                   <span className="text-indigo-400 font-semibold">{startup.avg_total}/60</span>

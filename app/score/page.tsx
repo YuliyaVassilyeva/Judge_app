@@ -14,6 +14,8 @@ const CRITERIA = [
 
 type Scores = Record<(typeof CRITERIA)[number]["key"], number>;
 
+const STARTUPS = ["A", "B", "C", "D", "E"] as const;
+
 const defaultScores = (): Scores =>
   Object.fromEntries(CRITERIA.map((c) => [c.key, 5])) as Scores;
 
@@ -83,17 +85,26 @@ export default function ScorePage() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
           <label className="text-sm font-medium text-gray-400 uppercase tracking-wide">
-            Startup Name
+            Startup
           </label>
-          <input
-            value={startupName}
-            onChange={(e) => setStartupName(e.target.value)}
-            required
-            placeholder="e.g. Acme Inc."
-            className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white text-lg placeholder-gray-600 focus:outline-none focus:border-indigo-500"
-          />
+          <div className="flex gap-3">
+            {STARTUPS.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => { setStartupName(s); setScores(defaultScores()); setSubmitted(false); }}
+                className={`flex-1 py-3 rounded-xl text-xl font-bold border-2 transition-all ${
+                  startupName === s
+                    ? "bg-indigo-600 border-indigo-500 text-white"
+                    : "bg-gray-800 border-gray-700 text-gray-400 hover:border-indigo-500"
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="flex flex-col gap-5">
